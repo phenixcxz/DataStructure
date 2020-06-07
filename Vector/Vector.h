@@ -84,9 +84,9 @@ public:
     Vector_Iterator<T> begin(){
         return Vector_Iterator<T>(*this);
     }
-    Vector_Iterator<T> end(){
-        return Vector_Iterator<T>()
-    }
+    // Vector_Iterator<T> end(){
+    //     return Vector_Iterator<T>()
+    // }
 
 };
 
