@@ -36,7 +36,6 @@ TreeNode * createTree(int left,int right){
 	return root;
 }
 
-
 //先序遍历递归版
 void travPre_R(TreeNode * root){
 	if(!root)
@@ -61,23 +60,6 @@ void travPost_R(TreeNode * root){
 	travPost_R(root->right);
 	cout << root->val << "  ";
 }
-
-// //先序遍历迭代版
-// void travPre_I(TreeNode *root){
-// 	stack<TreeNode *> S;
-// 	while(1){
-// 		while(root){
-// 			cout << root->val << "  ";
-// 			if(root->right)
-// 				S.push(root->right);
-// 			root = root->left;
-// 		}
-// 		if(S.empty())
-// 			break;
-// 		root = S.top();
-// 		S.pop();
-// 	}
-// }
 
 //先序遍历迭代版
 void travPre_I(TreeNode * root){
@@ -113,6 +95,29 @@ void travIn_I(TreeNode * root){
 	}
 }
 
+//后序遍历迭代版
+void travPost_I(TreeNode * root){
+	stack<TreeNode *> S;
+	if(root)
+		S.push(root);
+	while(S.size()){
+		if(S.top()->left != root && S.top()->right != root){
+			while(TreeNode* x = S.top()){
+				if(x->left){
+					if(x->right)
+						S.push(x->right);
+					S.push(x->left);
+				}
+					S.push(x->right);
+			}
+			S.pop();
+		}
+		root = S.top();
+		S.pop();
+		cout << root->val << "  ";
+	}	
+}
+
 
 //层序遍历迭代版
 void travLevel_I(TreeNode* root){
@@ -144,8 +149,11 @@ int main(void){
 	cout << endl<<"先序遍历迭代版" << endl;
 	travPre_I(root);
 
-	cout << endl << "层序遍历迭代版" << endl;
+	cout << endl << "中序遍历迭代版" << endl;
 	travIn_I(root) ;
+
+	cout << endl << "后序遍历迭代版" << endl;
+	travPost_I(root);
 	
 	cout << endl<< "层序遍历迭代版" << endl;
 	travLevel_I(root);
