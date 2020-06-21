@@ -61,8 +61,25 @@ void travPost_R(TreeNode * root){
 	cout << root->val << "  ";
 }
 
-//先序遍历迭代版
+
+
 void travPre_I(TreeNode * root){
+	stack<TreeNode *> S;
+	S.push(root);
+	while(!S.empty()){
+		TreeNode * temp = S.top();		//输出节点
+		S.pop();
+		cout << temp->val << "  ";
+		if(temp->right != NULL)			//如果有右节点则入栈，等待左子树输出后再输出
+			S.push(temp->right)	;
+		if(temp->left != NULL) 			//如果有左节点则入栈，等待输出
+			S.push(temp->left);
+
+	}
+}
+
+//先序遍历迭代版
+void travPre_I2(TreeNode * root){
 	stack<TreeNode *> S;
 	while(1){
 		while(root){
@@ -78,44 +95,95 @@ void travPre_I(TreeNode * root){
 	}
 }
 
+
 //中序遍历迭代版
-void travIn_I(TreeNode * root){
+void travIn_I(TreeNode *root){
+	stack<TreeNode*> S;
+	S.push(root);
+	while(!S.empty()){
+		while(S.top()->left)		//入栈到左底节点
+			S.push(S.top()->left);
+		while(!S.empty()){
+			TreeNode * temp = S.top();
+			S.pop();
+			cout << temp->val << "  ";		//输出节点
+			if(temp->right){
+				S.push(temp->right);		//如果有右子节点，入栈，返回重新入栈到左底节点
+				break;
+			}
+
+		}
+	}
+}
+
+//中序遍历迭代版
+void travIn_I2(TreeNode * root){
 	stack<TreeNode *> S;
 	while(1){
-		while(root){
+		if(root){
 			S.push(root);
 			root = root->left;
 		}
-		if(S.empty())
+		else if(!S.empty()){
+			root = S.top();
+			cout << root->val << "  ";
+			root = root->right;
+			S.pop();
+		}
+		else
 			break;
-		root = S.top();
-		cout << root->val << "  ";
-		root = root->right;
-		S.pop();
+
 	}
+	cout << endl;
 }
+
+
+
+
+// //后序遍历迭代版
+// void travPost_I(TreeNode * root){
+// 	stack<TreeNode *> S;
+// 	if(root)
+// 		S.push(root);
+// 	while(S.size()){
+// 		if(S.top()->left != root && S.top()->right != root){
+// 			while(TreeNode* x = S.top()){
+// 				if(x->left){
+// 					if(x->right)
+// 						S.push(x->right);
+// 					S.push(x->left);
+// 				}
+// 					S.push(x->right);
+// 			}
+// 			S.pop();
+// 		}
+// 		root = S.top();
+// 		S.pop();
+// 		cout << root->val << "  ";
+// 	}	
+// }
 
 //后序遍历迭代版
 void travPost_I(TreeNode * root){
 	stack<TreeNode *> S;
-	if(root)
-		S.push(root);
+	S.push(root);
+	TreeNode * lastNode = nullptr;
 	while(S.size()){
-		if(S.top()->left != root && S.top()->right != root){
-			while(TreeNode* x = S.top()){
-				if(x->left){
-					if(x->right)
-						S.push(x->right);
-					S.push(x->left);
-				}
-					S.push(x->right);
+		while(S.top()->left)
+			S.push(S.top()->left);
+		while(S.size()){
+			if( lastNode == S.top()->right ||  S.top()->right == NULL){
+				TreeNode * temp = S.top();
+				S.pop();
+				cout << temp->val << "  ";
+				lastNode = temp;		
 			}
-			S.pop();
+			else if(S.top()->right){
+				S.push(S.top()->right);
+				break;
+			}
 		}
-		root = S.top();
-		S.pop();
-		cout << root->val << "  ";
-	}	
+	}
 }
 
 
